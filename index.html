@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Recettes</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="recettes.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1 class="brand"><a href="./">Recettes</a></h1>
+    <div id="browse-tools" class="search">
+      <label for="search" class="sr-only">Rechercher une recette ou un ingrédient</label>
+      <input id="search" type="search" placeholder="Rechercher un plat, un ingrédient…" autocomplete="off">
+    </div>
+  </header>
+
+  <div id="shared-banner" class="banner" hidden>
+    <p id="shared-text"></p>
+    <a href="./" class="btn">Voir toutes les recettes</a>
+  </div>
+
+  <main id="main">
+    <p id="count" class="count" aria-live="polite"></p>
+    <ul id="grid" class="grid"></ul>
+    <nav id="shared-toc" class="toc" aria-label="Recettes partagées" hidden></nav>
+    <div id="shared-list" class="shared-list" hidden></div>
+    <noscript><p class="count">Ce site nécessite JavaScript.</p></noscript>
+  </main>
+
+  <div id="selection-bar" class="selection-bar" role="region" aria-label="Sélection" hidden>
+    <span id="sel-count" class="sel-count"></span>
+    <label for="share-link" class="sr-only">Lien de partage</label>
+    <input id="share-link" class="share-link" type="text" readonly>
+    <button id="btn-copy" class="btn primary" type="button">Copier le lien</button>
+    <button id="btn-share" class="btn" type="button" hidden>Partager…</button>
+    <a id="btn-open" class="btn" href="./">Ouvrir</a>
+    <button id="btn-clear" class="btn" type="button">Tout désélectionner</button>
+    <span id="copy-status" class="copy-status" role="status" aria-live="polite"></span>
+  </div>
+
+  <dialog id="detail" aria-labelledby="detail-title">
+    <div class="dialog-inner">
+      <div class="dialog-actions">
+        <button id="detail-select" class="btn" type="button" aria-pressed="false"></button>
+        <button id="detail-close" class="btn" type="button" aria-label="Fermer">✕</button>
+      </div>
+      <div id="detail-content"></div>
+    </div>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,275 @@
+:root {
+  --bg: #faf8f5;
+  --card: #ffffff;
+  --text: #1f1d1a;
+  --muted: #5f5a52;
+  --line: #e4ded4;
+  --accent: #1d6b4f;
+  --accent-text: #ffffff;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+a { color: var(--accent); }
+
+/* ---------------- En-tête ---------------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 0.75rem clamp(1rem, 3vw, 2rem);
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { margin: 0; font-size: 1.35rem; }
+.brand a { color: inherit; text-decoration: none; }
+
+.search { flex: 1 1 260px; max-width: 520px; }
+.search input {
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem clamp(1rem, 3vw, 2rem) 2rem;
+}
+body.has-selection main { padding-bottom: 9rem; }
+
+.count { color: var(--muted); margin: 0 0 0.75rem; }
+
+/* ---------------- Boutons ---------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+
+/* ---------------- Grille ---------------- */
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card.selected { border-color: var(--accent); }
+
+.card-open {
+  display: block;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.card-open img,
+.card-open .no-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: var(--line);
+}
+.card-title { display: block; padding: 0.6rem 0.75rem 0.75rem; font-weight: 600; line-height: 1.3; }
+
+.card-check {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgb(255 255 255 / 0.92);
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+.card-check input { width: 1.3rem; height: 1.3rem; margin: 0; accent-color: var(--accent); cursor: pointer; }
+
+/* ---------------- Barre de sélection ---------------- */
+
+.selection-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.75rem clamp(1rem, 3vw, 2rem);
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -2px 8px rgb(0 0 0 / 0.08);
+}
+.selection-bar[hidden] { display: none; }
+.sel-count { font-weight: 600; }
+.share-link {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 0.5rem 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.copy-status { color: var(--accent); font-weight: 600; }
+
+/* ---------------- Fiche recette ---------------- */
+
+.recipe {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.recipe-img { display: block; width: 100%; max-height: 360px; object-fit: cover; }
+.recipe-body { padding: 1rem clamp(1rem, 3vw, 1.75rem) 1.5rem; }
+.recipe h2 { margin: 0 0 0.75rem; font-size: 1.5rem; line-height: 1.25; }
+.recipe h3 { margin: 1.25rem 0 0.5rem; font-size: 1.1rem; }
+.recipe h4 { margin: 0.75rem 0 0.25rem; font-size: 1rem; }
+
+.ingredients ul { list-style: none; margin: 0; padding: 0; columns: 2 220px; column-gap: 2rem; }
+.ingredients li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px dotted var(--line);
+  break-inside: avoid;
+}
+.ingredients .qty { color: var(--muted); white-space: nowrap; }
+.kitchen { margin: 0; color: var(--muted); }
+
+.steps { margin: 0; padding-left: 1.5rem; }
+.steps > li { margin-bottom: 0.75rem; }
+.steps > li::marker { font-weight: 700; color: var(--accent); }
+.steps ul { margin: 0.25rem 0 0; padding-left: 1.1rem; }
+.steps ul li { margin: 0.15rem 0; }
+
+/* ---------------- Fenêtre de détail ---------------- */
+
+dialog {
+  width: min(860px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  overflow: auto;
+}
+dialog::backdrop { background: rgb(0 0 0 / 0.55); }
+.dialog-inner { position: relative; }
+.dialog-actions {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  background: rgb(255 255 255 / 0.95);
+  border-bottom: 1px solid var(--line);
+}
+dialog .recipe { box-shadow: none; border-radius: 0; }
+
+/* ---------------- Mode partage ---------------- */
+
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  max-width: 900px;
+  margin: 1rem auto 0;
+  padding: 0.75rem 1rem;
+  background: #e6f2ec;
+  border-radius: var(--radius);
+}
+.banner p { margin: 0; font-weight: 600; }
+.banner[hidden] { display: none; }
+
+body.shared main { max-width: 900px; }
+.toc ul { margin: 0 0 1rem; padding-left: 1.25rem; }
+.shared-list { display: grid; gap: 1.5rem; }
+.shared-list .recipe h2 { scroll-margin-top: 5rem; }
+
+/* ---------------- Impression ---------------- */
+
+@media print {
+  .topbar, .banner, .selection-bar, .toc { display: none !important; }
+  body { background: #fff; }
+  .recipe { box-shadow: none; break-inside: avoid-page; }
+  .recipe-img { max-height: 220px; }
+  .shared-list .recipe + .recipe { break-before: page; }
+}
