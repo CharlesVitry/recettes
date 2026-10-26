@@ -13,9 +13,16 @@
 <body>
   <header class="topbar">
     <h1 class="brand"><a href="./">Recettes</a></h1>
-    <div id="browse-tools" class="search">
-      <label for="search" class="sr-only">Rechercher une recette ou un ingrédient</label>
-      <input id="search" type="search" placeholder="Rechercher un plat, un ingrédient…" autocomplete="off">
+    <div id="browse-tools" class="tools">
+      <div class="search">
+        <label for="search" class="sr-only">Rechercher une recette ou un ingrédient</label>
+        <input id="search" type="search" placeholder="Rechercher un plat, un ingrédient…" autocomplete="off">
+      </div>
+      <div id="duration-filter" class="duration-filter">
+        <label for="duration">Durée max</label>
+        <input id="duration" type="range">
+        <output id="duration-value" for="duration"></output>
+      </div>
     </div>
   </header>
 

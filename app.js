@@ -46,9 +46,42 @@
   // Fiche recette complète (détail et mode partage)
   // ------------------------------------------------------------------
 
+  const formatDuration = (min) => {
+    if (min == null) return "";
+    const h = Math.floor(min / 60), m = min % 60;
+    return h ? `${h} h${m ? ` ${String(m).padStart(2, "0")}` : ""}` : `${m} min`;
+  };
+
+  const durationBadge = (r, cls) =>
+    r.duree == null ? null
+      : el("span", { class: `duration ${cls}` },
+          el("span", { "aria-hidden": "true", text: "⏱ " }),
+          el("span", { class: "sr-only", text: "Durée : " }),
+          formatDuration(r.duree));
+
+  function nutritionTable(rows) {
+    const tbody = el("tbody");
+    for (const [label, value, unit] of rows) {
+      const sub = label.startsWith("dont ");
+      tbody.append(el("tr", sub ? { class: "sub" } : {},
+        el("th", { scope: "row", text: label }),
+        el("td", { text: `${value} ${unit}` })));
+    }
+    return el("section", { class: "nutrition" },
+      el("h3", { text: "Valeurs nutritionnelles" }),
+      el("table", {},
+        el("caption", { text: "Pour 100 g" }),
+        el("thead", {}, el("tr", {},
+          el("th", { scope: "col", text: "Nutriment" }),
+          el("th", { scope: "col", text: "Valeur" }))),
+        tbody));
+  }
+
   function recipeArticle(r, headingId) {
     const body = el("div", { class: "recipe-body" },
       el("h2", { id: headingId, text: r.nom }));
+    const badge = durationBadge(r, "duration-detail");
+    if (badge) body.append(el("p", { class: "recipe-meta" }, badge));
 
     if (r.ingredients.length || r.cuisine.length) {
       const section = el("section", { class: "ingredients" }, el("h3", { text: "Ingrédients" }));
@@ -82,6 +115,8 @@
       body.append(el("section", { class: "preparation" }, el("h3", { text: "Préparation" }), ol));
     }
 
+    if (r.nutrition && r.nutrition.length) body.append(nutritionTable(r.nutrition));
+
     const article = el("article", { class: "recipe", "aria-labelledby": headingId });
     if (r.image) article.append(el("img", { class: "recipe-img", src: r.image, alt: "", decoding: "async" }));
     article.append(body);
@@ -104,29 +139,61 @@
         el("span", { class: "card-title", text: r.nom }));
       open.addEventListener("click", () => openDetail(r));
 
+      const badge = durationBadge(r, "duration-card");
+      if (badge) open.append(badge);
+
       const li = el("li", { class: "card" }, open,
         el("label", { class: "card-check", title: "Sélectionner" }, cb,
           el("span", { class: "sr-only", text: `Sélectionner « ${r.nom} »` })));
 
       const words = [r.nom, ...r.ingredients.map((i) => i[0]), ...r.cuisine].join(" ");
-      cards.set(r.id, { li, cb, haystack: normalize(words) });
+      cards.set(r.id, { li, cb, haystack: normalize(words), duree: r.duree });
       frag.append(li);
     }
     $("grid").append(frag);
-    filter("");
+    applyFilters();
   }
 
-  function filter(query) {
-    const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
+  // Curseur de durée : bornes déduites des données, pas de 5 min.
+  // En position maximale, aucune limite (les recettes sans durée restent visibles).
+  const DURATIONS = RECIPES.map((r) => r.duree).filter((d) => d != null);
+  const DUR_MIN = DURATIONS.length ? Math.min(...DURATIONS) : 0;
+  const DUR_MAX = DURATIONS.length ? Math.max(...DURATIONS) : 0;
+
+  function maxDuration() {
+    const v = Number($("duration").value);
+    return v >= DUR_MAX ? Infinity : v;
+  }
+
+  function applyFilters() {
+    const terms = normalize($("search").value.trim()).split(/\s+/).filter(Boolean);
+    const limit = maxDuration();
     let shown = 0;
-    for (const { li, haystack } of cards.values()) {
-      const match = terms.every((t) => haystack.includes(t));
+    for (const { li, haystack, duree } of cards.values()) {
+      const okDuration = limit === Infinity || (duree != null && duree <= limit);
+      const match = okDuration && terms.every((t) => haystack.includes(t));
       li.hidden = !match;
       if (match) shown++;
     }
-    $("count").textContent = terms.length
+    const label = limit === Infinity ? "Toutes durées" : `≤ ${formatDuration(limit)}`;
+    $("duration-value").textContent = label;
+    $("duration").setAttribute("aria-valuetext", label);
+    $("count").textContent = terms.length || limit !== Infinity
       ? `${shown} / ${plural(RECIPES.length, "recette", "recettes")}`
       : plural(RECIPES.length, "recette", "recettes");
+  }
+
+  function initDurationFilter() {
+    const input = $("duration");
+    if (!DURATIONS.length || DUR_MIN === DUR_MAX) {
+      $("duration-filter").hidden = true;
+      return;
+    }
+    input.min = DUR_MIN;
+    input.max = DUR_MAX;
+    input.step = 5;
+    input.value = DUR_MAX;
+    input.addEventListener("input", applyFilters);
   }
 
   function setSelected(id, on) {
@@ -191,8 +258,9 @@
   }
 
   function initBrowse() {
+    initDurationFilter();
     renderGrid();
-    $("search").addEventListener("input", (e) => filter(e.target.value));
+    $("search").addEventListener("input", applyFilters);
     $("btn-copy").addEventListener("click", copyLink);
     $("btn-clear").addEventListener("click", () => [...selection].forEach((id) => setSelected(id, false)));
     if (navigator.share) {

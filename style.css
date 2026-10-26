@@ -54,7 +54,25 @@ a { color: var(--accent); }
 .brand { margin: 0; font-size: 1.35rem; }
 .brand a { color: inherit; text-decoration: none; }
 
+.tools {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.5rem;
+}
 .search { flex: 1 1 260px; max-width: 520px; }
+
+.duration-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 0 1 340px;
+  font-size: 0.95rem;
+}
+.duration-filter label { font-weight: 600; white-space: nowrap; }
+.duration-filter input { flex: 1 1 120px; min-width: 100px; accent-color: var(--accent); cursor: pointer; }
+.duration-filter output { min-width: 7.5em; color: var(--muted); white-space: nowrap; }
 .search input {
   width: 100%;
   padding: 0.55rem 0.8rem;
@@ -135,6 +153,35 @@ body.has-selection main { padding-bottom: 9rem; }
   background: var(--line);
 }
 .card-title { display: block; padding: 0.6rem 0.75rem 0.75rem; font-weight: 600; line-height: 1.3; }
+
+.duration { white-space: nowrap; font-weight: 600; }
+.duration-card {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: rgb(255 255 255 / 0.92);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+}
+.recipe-meta { margin: -0.25rem 0 0.75rem; color: var(--muted); }
+
+/* ---------------- Nutrition ---------------- */
+
+.nutrition table {
+  width: 100%;
+  max-width: 420px;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.nutrition caption { caption-side: top; text-align: left; color: var(--muted); padding-bottom: 0.35rem; }
+.nutrition th, .nutrition td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--line); text-align: left; }
+.nutrition thead th { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.nutrition tbody th { font-weight: 500; }
+.nutrition td { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.nutrition tr.sub th { padding-left: 1.4rem; font-weight: 400; color: var(--muted); }
 
 .card-check {
   position: absolute;
