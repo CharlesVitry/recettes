@@ -311,10 +311,24 @@ body.shared main { max-width: 900px; }
 .shared-list { display: grid; gap: 1.5rem; }
 .shared-list .recipe h2 { scroll-margin-top: 5rem; }
 
+.banner-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.recipe-actions { margin: 1.5rem 0 0; }
+
+/* ---------------- Export PDF ---------------- */
+
+/* Construit hors écran (il doit être mis en page pour ajuster la police). */
+#print-root { position: fixed; top: 0; left: -400mm; pointer-events: none; }
+
+@media print {
+  body.printing > :not(#print-root) { display: none !important; }
+  body.printing #print-root { position: static; left: auto; }
+  body:not(.printing) #print-root { display: none; }
+}
+
 /* ---------------- Impression ---------------- */
 
 @media print {
-  .topbar, .banner, .selection-bar, .toc { display: none !important; }
+  .topbar, .banner, .selection-bar, .toc, .recipe-actions { display: none !important; }
   body { background: #fff; }
   .recipe { box-shadow: none; break-inside: avoid-page; }
   .recipe-img { max-height: 220px; }

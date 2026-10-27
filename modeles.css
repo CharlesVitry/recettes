@@ -1,0 +1,152 @@
+/*
+ * Modèles PDF des recettes – styles partagés écran / impression.
+ * Les tailles de texte sont en em : modeles.js ajuste la police de chaque
+ * feuille (ou recette) pour que le contenu tienne dans la page.
+ */
+
+.pm-root {
+  --accent: #1d6b4f;
+  --warm: #a7643b;
+  --orange: #d9714a;
+  --muted: #5f5a52;
+  --line: #e2dcd2;
+  color: #1f1d1a;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.pm-root *, .pm-root *::before, .pm-root *::after { box-sizing: border-box; }
+.pm-root h2, .pm-root h3, .pm-root h4, .pm-root p, .pm-root ul, .pm-root ol { margin: 0; padding: 0; }
+
+.pm-photo-box { background: #e4ded4; overflow: hidden; }
+.pm-photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.pm-nut { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.pm-nut td { padding: 0.12em 0.25em; border-bottom: 0.2mm solid var(--line); vertical-align: top; }
+.pm-nut td:last-child { text-align: right; white-space: nowrap; }
+.pm-nut tr.sub td:first-child { padding-left: 1em; color: var(--muted); }
+
+/* ---------- Feuilles de taille fixe (modèles 1, 3, 4) ---------- */
+
+.pm-sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  break-after: page;
+  page-break-after: always;
+}
+.pm-sheet:last-child { break-after: auto; page-break-after: auto; }
+.pm-a4 { width: 210mm; height: 297mm; }
+.pm-a6l { width: 148mm; height: 105mm; }
+.pm-fit { min-height: 0; overflow: hidden; }
+
+/* ---------- 1 · Classique ---------- */
+
+.m1 { font-size: 9.5pt; line-height: 1.4; }
+.m1 > .pm-photo-box { flex: none; height: 72mm; }
+.m1 .pm-body { flex: 1; padding: 9mm 13mm 10mm; }
+.m1 h2 { font-size: 1.75em; line-height: 1.2; color: var(--accent); }
+.m1 .pm-dur { margin-top: 0.2em; color: var(--muted); }
+.m1 .pm-cols { display: grid; grid-template-columns: 60mm 1fr; gap: 8mm; margin-top: 5mm; }
+.m1 h3 { margin-bottom: 0.45em; font-size: 0.85em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.m1 .pm-ing li { display: flex; justify-content: space-between; gap: 0.6em; padding: 0.1em 0; list-style: none; border-bottom: 0.2mm dotted #c8c2b8; }
+.m1 .pm-ing .q { white-space: nowrap; color: var(--muted); }
+.m1 .pm-kitchen { margin-top: 0.5em; color: var(--muted); }
+.m1 .pm-nutbox { margin-top: 5mm; }
+.m1 .pm-step + .pm-step { margin-top: 0.6em; }
+.m1 .pm-step h4 { margin-bottom: 0.2em; font-size: 1em; }
+.m1 .pm-step ul { padding-left: 1.1em; }
+.m1 .pm-step li { margin-bottom: 0.15em; }
+
+/* ---------- 2 · Fiche compacte (flux) ---------- */
+
+.m2 { font-family: Georgia, "Times New Roman", serif; line-height: 1.4; }
+.m2-recipe { font-size: 10pt; }
+.m2-recipe + .m2-recipe { margin-top: 6mm; padding-top: 6mm; border-top: 0.3mm dashed #999; }
+.m2 h2 { padding-bottom: 0.25em; font-size: 1.5em; line-height: 1.2; border-bottom: 0.5mm solid #222; }
+.m2 .pm-meta { display: flex; gap: 1.5em; margin: 0.45em 0 0.2em; font-family: "Segoe UI", Arial, sans-serif; font-size: 0.8em; }
+.m2 h3 { margin: 1em 0 0.4em; font-family: "Segoe UI", Arial, sans-serif; font-size: 0.8em; letter-spacing: 0.06em; text-transform: uppercase; }
+.m2 .pm-check { columns: 2; column-gap: 8mm; list-style: none; }
+.m2 .pm-check li { position: relative; padding-left: 1.25em; margin-bottom: 0.15em; break-inside: avoid; }
+.m2 .pm-check li::before { content: ""; position: absolute; left: 0; top: 0.3em; width: 0.75em; height: 0.75em; border: 0.25mm solid #333; }
+.m2 ol { padding-left: 1.4em; }
+.m2 ol > li { margin-bottom: 0.45em; break-inside: avoid; }
+.m2 .pm-nutline { margin-top: 1em; padding-top: 0.4em; font-family: "Segoe UI", Arial, sans-serif; font-size: 0.78em; color: #333; border-top: 0.3mm solid #222; }
+
+/* ---------- 3 · Magazine ---------- */
+
+.m3 { font-size: 9.5pt; line-height: 1.42; }
+.m3 .pm-hero { position: relative; flex: none; height: 105mm; }
+.m3 .pm-hero .pm-photo-box { position: absolute; inset: 0; }
+.m3 .pm-title { position: absolute; left: 0; right: 0; bottom: 0; padding: 16mm 13mm 6mm; color: #fff; background: linear-gradient(transparent, rgb(0 0 0 / 0.72)); }
+.m3 .pm-title .pm-dur { margin-bottom: 0.3em; font-size: 0.95em; opacity: 0.92; }
+.m3 .pm-title h2 { font-family: Georgia, "Times New Roman", serif; font-size: 2.1em; line-height: 1.12; }
+.m3 .pm-body { flex: 1; display: grid; grid-template-columns: 1fr 56mm; gap: 7mm; padding: 7mm 13mm 9mm; }
+.m3 .pm-steps { list-style: none; counter-reset: pm-s; }
+.m3 .pm-steps > li { position: relative; padding-left: 2.2em; margin-bottom: 0.75em; counter-increment: pm-s; }
+.m3 .pm-steps > li::before { content: counter(pm-s); position: absolute; left: 0; top: -0.1em; font-family: Georgia, serif; font-size: 1.9em; font-weight: 700; line-height: 1; color: var(--orange); }
+.m3 .pm-steps h4 { margin-bottom: 0.15em; font-size: 1.05em; }
+.m3 aside { align-self: start; padding: 4mm; background: #f6f1e8; border-radius: 2mm; }
+.m3 aside h3 { margin-bottom: 0.4em; font-size: 0.8em; letter-spacing: 0.07em; text-transform: uppercase; color: var(--warm); }
+.m3 .pm-ing li { margin-bottom: 0.15em; list-style: none; }
+.m3 .pm-ing .q { color: var(--muted); }
+.m3 .pm-kitchen { margin: 0.4em 0 0.9em; color: var(--muted); }
+
+/* ---------- 4 · Carte recto/verso A6 paysage ---------- */
+
+.m4 { font-size: 8.5pt; line-height: 1.35; }
+.m4.pm-recto { flex-direction: row; }
+.m4.pm-recto > .pm-photo-box { flex: none; width: 56mm; }
+.m4 .pm-r { flex: 1; padding: 5mm 5mm 4mm; }
+.m4 h2 { margin-bottom: 0.35em; font-size: 1.4em; line-height: 1.18; }
+.m4 .pm-pill { display: inline-block; margin-bottom: 0.6em; padding: 0.1em 0.7em; font-size: 0.85em; color: #fff; background: var(--accent); border-radius: 99px; }
+.m4 .pm-ing li { display: flex; justify-content: space-between; gap: 0.5em; padding: 0.05em 0; list-style: none; border-bottom: 0.2mm dotted #bbb; }
+.m4 .pm-ing .q { white-space: nowrap; }
+.m4 .pm-kitchen { margin-top: 0.4em; color: var(--muted); }
+.m4 .pm-nutline { margin-top: 0.5em; font-size: 0.85em; color: var(--muted); }
+.m4.pm-verso { flex-direction: row; gap: 4mm; padding: 5mm; }
+.m4 .pm-v-steps { flex: 1; }
+.m4 .pm-v-steps h4 { margin-bottom: 0.1em; font-size: 1em; color: var(--accent); }
+.m4 .pm-v-steps p { margin-bottom: 0.45em; }
+.m4 .pm-v-nut { flex: none; width: 38mm; }
+.m4 .pm-v-nut h4 { margin-bottom: 0.2em; font-size: 1em; color: var(--accent); }
+
+/* ---------- 5 · Mode cuisine (flux, gros caractères) ---------- */
+
+.m5-recipe { font-size: 13pt; line-height: 1.4; }
+.m5-recipe + .m5-recipe { break-before: page; }
+.m5 .pm-head { display: flex; align-items: center; gap: 5mm; margin-bottom: 5mm; }
+.m5 .pm-head .pm-photo-box { flex: none; width: 32mm; height: 32mm; border-radius: 50%; }
+.m5 h2 { font-size: 1.5em; line-height: 1.18; }
+.m5 .pm-dur { margin-top: 0.15em; font-size: 1.2em; font-weight: 700; color: var(--accent); }
+.m5 .pm-ing { columns: 2; column-gap: 8mm; margin-bottom: 5mm; list-style: none; }
+.m5 .pm-ing li { margin-bottom: 0.2em; break-inside: avoid; }
+.m5 .pm-box { position: relative; margin-bottom: 4mm; padding: 3mm 4mm 3mm 13mm; border: 0.5mm solid var(--accent); border-radius: 2.5mm; break-inside: avoid; }
+.m5 .pm-box::before { content: attr(data-n); position: absolute; left: 3.5mm; top: 3mm; width: 7mm; height: 7mm; font-size: 11pt; font-weight: 700; line-height: 7mm; text-align: center; color: #fff; background: var(--accent); border-radius: 50%; }
+.m5 .pm-box h4 { margin-bottom: 0.2em; font-size: 1.05em; }
+.m5 .pm-box ul { padding-left: 1.1em; }
+.m5 .pm-box li { margin-bottom: 0.15em; }
+.m5 .pm-nutbox { max-width: 115mm; margin-top: 5mm; break-inside: avoid; }
+.m5 .pm-nutbox h3 { margin-bottom: 0.3em; font-size: 1em; }
+
+/* ---------- Écran / impression ---------- */
+
+@media screen {
+  .pm-out { display: flex; flex-direction: column; align-items: center; gap: 8mm; padding: 8mm 0 16mm; }
+  .pm-sheet, .pm-paper { box-shadow: 0 1mm 4mm rgb(0 0 0 / 0.2); }
+  .pm-paper { padding: var(--marge); background: #fff; }
+  /* repère rouge : fin de page approximative (modèles en flux) */
+  .pm-flowdoc {
+    background: repeating-linear-gradient(to bottom,
+      transparent 0 calc(var(--page-h) - 0.3mm),
+      #d33 calc(var(--page-h) - 0.3mm) var(--page-h));
+  }
+}
+
+@media print {
+  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  .no-print { display: none !important; }
+  .pm-out { display: block; }
+}

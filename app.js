@@ -117,10 +117,52 @@
 
     if (r.nutrition && r.nutrition.length) body.append(nutritionTable(r.nutrition));
 
+    if (window.PdfModeles) {
+      const btn = el("button", { class: "btn", type: "button", text: "Exporter en PDF" });
+      btn.addEventListener("click", () => exportPdf([r.id]));
+      body.append(el("p", { class: "recipe-actions" }, btn));
+    }
+
     const article = el("article", { class: "recipe", "aria-labelledby": headingId });
     if (r.image) article.append(el("img", { class: "recipe-img", src: r.image, alt: "", decoding: "async" }));
     article.append(body);
     return article;
+  }
+
+  // ------------------------------------------------------------------
+  // Export PDF (modèle 1 « Classique », une page A4 par recette)
+  // Tout se passe dans le navigateur : les pages sont construites dans
+  // #print-root puis imprimées seules (« Enregistrer au format PDF »).
+  // ------------------------------------------------------------------
+
+  let exporting = false;
+
+  async function exportPdf(ids) {
+    if (exporting || !window.PdfModeles || !ids.length) return;
+    exporting = true;
+    const root = $("print-root");
+    const previousTitle = document.title;
+    try {
+      PdfModeles.render(root, 1, ids, { imgBase: "" });
+      await Promise.all([...root.querySelectorAll("img")].map((img) => img.decode().catch(() => null)));
+    } catch (err) {
+      exporting = false;
+      root.replaceChildren();
+      console.error("Export PDF impossible :", err);
+      return;
+    }
+    // Le titre devient le nom de fichier proposé par le navigateur.
+    document.title = ids.length === 1 ? byId.get(ids[0]).nom : `Recettes (${ids.length})`;
+    document.body.classList.add("printing");
+
+    window.addEventListener("afterprint", () => {
+      document.body.classList.remove("printing");
+      root.replaceChildren();
+      document.getElementById("pm-page-style")?.remove();
+      document.title = previousTitle;
+      exporting = false;
+    }, { once: true });
+    window.print();
   }
 
   // ------------------------------------------------------------------
@@ -262,6 +304,8 @@
     renderGrid();
     $("search").addEventListener("input", applyFilters);
     $("btn-copy").addEventListener("click", copyLink);
+    if (window.PdfModeles) $("btn-pdf").addEventListener("click", () => exportPdf([...selection]));
+    else $("btn-pdf").hidden = true;
     $("btn-clear").addEventListener("click", () => [...selection].forEach((id) => setSelected(id, false)));
     if (navigator.share) {
       $("btn-share").hidden = false;
@@ -318,6 +362,10 @@
     }
     list.hidden = false;
     if (found.length) document.title = `${found.map((r) => r.nom).join(" · ")} – Recettes`;
+    if (found.length > 1 && window.PdfModeles) {
+      $("btn-pdf-all").hidden = false;
+      $("btn-pdf-all").addEventListener("click", () => exportPdf(found.map((r) => r.id)));
+    }
   }
 
   // ------------------------------------------------------------------
